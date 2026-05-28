@@ -2,6 +2,7 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/travel_bg"
     android:fillViewport="true">
 
     <LinearLayout
@@ -11,61 +12,80 @@
         android:padding="20dp">
 
         <TextView
+            android:id="@+id/tvHomeTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/home_title"
             android:textColor="@color/travel_dark"
-            android:textSize="24sp"
+            android:textSize="25sp"
             android:textStyle="bold" />
 
         <TextView
+            android:id="@+id/tvHomeDesc"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
+            android:lineSpacingExtra="3dp"
             android:text="@string/home_desc"
             android:textColor="@color/travel_gray"
             android:textSize="15sp" />
 
         <LinearLayout
+            android:id="@+id/cardToday"
             android:layout_width="match_parent"
-            android:layout_height="130dp"
+            android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
-            android:background="@color/white"
+            android:background="@drawable/bg_card_white"
             android:elevation="4dp"
-            android:gravity="center_vertical"
             android:orientation="vertical"
             android:padding="20dp">
 
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="오늘의 기록"
-                android:textColor="@color/travel_gray"
-                android:textSize="14sp" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:text="아직 저장된 여행 기록이 없습니다"
-                android:textColor="@color/travel_dark"
-                android:textSize="20sp"
+                android:text="오늘의 여행 기록"
+                android:textColor="@color/travel_blue"
+                android:textSize="15sp"
                 android:textStyle="bold" />
 
             <TextView
-                android:layout_width="wrap_content"
+                android:id="@+id/tvTodayMessage"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="6dp"
-                android:text="내일부터 RecyclerView와 SQLite를 연결할 예정입니다."
+                android:layout_marginTop="10dp"
+                android:text="아직 저장된 여행 기록이 없습니다"
+                android:textColor="@color/travel_dark"
+                android:textSize="21sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:lineSpacingExtra="3dp"
+                android:text="여행지명, 날짜, 사진, 메모를 저장할 수 있도록 기능을 하나씩 구현할 예정입니다."
                 android:textColor="@color/travel_gray"
-                android:textSize="13sp" />
+                android:textSize="14sp" />
+
+            <Button
+                android:id="@+id/btnGoList"
+                android:layout_width="match_parent"
+                android:layout_height="52dp"
+                android:layout_marginTop="18dp"
+                android:background="@drawable/bg_primary_button"
+                android:text="여행 기록 목록 보기"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                android:textSize="15sp"
+                android:textStyle="bold" />
 
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/summaryArea"
             android:layout_width="match_parent"
-            android:layout_height="110dp"
-            android:layout_marginTop="16dp"
+            android:layout_height="120dp"
+            android:layout_marginTop="18dp"
             android:orientation="horizontal">
 
             <LinearLayout
@@ -73,7 +93,8 @@
                 android:layout_height="match_parent"
                 android:layout_marginEnd="8dp"
                 android:layout_weight="1"
-                android:background="@color/card_blue"
+                android:background="@drawable/bg_card_blue"
+                android:elevation="2dp"
                 android:gravity="center"
                 android:orientation="vertical"
                 android:padding="12dp">
@@ -86,12 +107,13 @@
                     android:textSize="14sp" />
 
                 <TextView
+                    android:id="@+id/tvTotalCount"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
                     android:text="0개"
                     android:textColor="@color/travel_blue"
-                    android:textSize="24sp"
+                    android:textSize="26sp"
                     android:textStyle="bold" />
 
             </LinearLayout>
@@ -101,7 +123,8 @@
                 android:layout_height="match_parent"
                 android:layout_marginStart="8dp"
                 android:layout_weight="1"
-                android:background="@color/card_yellow"
+                android:background="@drawable/bg_card_yellow"
+                android:elevation="2dp"
                 android:gravity="center"
                 android:orientation="vertical"
                 android:padding="12dp">
@@ -114,15 +137,110 @@
                     android:textSize="14sp" />
 
                 <TextView
+                    android:id="@+id/tvMarkerStatus"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
                     android:text="준비중"
                     android:textColor="@color/travel_orange"
-                    android:textSize="22sp"
+                    android:textSize="23sp"
                     android:textStyle="bold" />
 
             </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/cardRecent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="18dp"
+            android:background="@drawable/bg_card_white"
+            android:elevation="4dp"
+            android:orientation="vertical"
+            android:padding="20dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="최근 여행"
+                android:textColor="@color/travel_dark"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="96dp"
+                android:layout_marginTop="14dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="86dp"
+                    android:layout_height="86dp"
+                    android:background="@drawable/bg_card_green"
+                    android:gravity="center"
+                    android:text="PHOTO"
+                    android:textColor="@color/travel_green"
+                    android:textSize="13sp"
+                    android:textStyle="bold" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="14dp"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="최근 기록이 없습니다"
+                        android:textColor="@color/travel_dark"
+                        android:textSize="17sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="6dp"
+                        android:text="여행 기록을 추가하면 이곳에 최근 여행지가 표시됩니다."
+                        android:textColor="@color/travel_gray"
+                        android:textSize="13sp" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/cardPlan"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="18dp"
+            android:layout_marginBottom="24dp"
+            android:background="@drawable/bg_card_white"
+            android:elevation="4dp"
+            android:orientation="vertical"
+            android:padding="20dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="다음 구현 예정"
+                android:textColor="@color/travel_dark"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:lineSpacingExtra="5dp"
+                android:text="• 여행 기록 목록 RecyclerView 구현\n• 여행 기록 데이터 클래스 작성\n• SQLiteOpenHelper 기반 DBHelper 구현\n• 기록 추가, 수정, 삭제 기능 연결"
+                android:textColor="@color/travel_gray"
+                android:textSize="14sp" />
 
         </LinearLayout>
 
