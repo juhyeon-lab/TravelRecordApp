@@ -18,11 +18,20 @@ class TravelListFragment : Fragment() {
         val view = inflater.inflate(R.layout.fragment_travel_list, container, false)
 
         val btnAddTravel = view.findViewById<Button>(R.id.btnAddTravel)
+        val layoutTravelItem = view.findViewById<View>(R.id.layoutTravelItem)
 
         btnAddTravel.setOnClickListener {
             Toast.makeText(
                 requireContext(),
                 "여행 기록 추가 화면은 다음 단계에서 구현할 예정입니다.",
+                Toast.LENGTH_SHORT
+            ).show()
+        }
+
+        layoutTravelItem.setOnClickListener {
+            Toast.makeText(
+                requireContext(),
+                "상세 화면 이동은 다음 단계에서 구현할 예정입니다.",
                 Toast.LENGTH_SHORT
             ).show()
         }

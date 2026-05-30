@@ -145,77 +145,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="26dp"
-            android:text="여행 기록 미리보기"
+            android:text="RecyclerView 아이템 미리보기"
             android:textColor="@color/travel_dark"
             android:textSize="18sp"
             android:textStyle="bold" />
 
-        <LinearLayout
-            android:id="@+id/sampleTravelCard"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="14dp"
-            android:layout_marginBottom="24dp"
-            android:background="@drawable/bg_card_white"
-            android:elevation="4dp"
-            android:orientation="horizontal"
-            android:padding="16dp">
-
-            <TextView
-                android:layout_width="92dp"
-                android:layout_height="92dp"
-                android:background="@drawable/bg_card_blue"
-                android:gravity="center"
-                android:text="PHOTO"
-                android:textColor="@color/travel_blue"
-                android:textSize="13sp"
-                android:textStyle="bold" />
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_weight="1"
-                android:orientation="vertical">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="부산 해운대"
-                    android:textColor="@color/travel_dark"
-                    android:textSize="18sp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
-                    android:text="2026-06-01"
-                    android:textColor="@color/travel_blue"
-                    android:textSize="14sp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:lineSpacingExtra="3dp"
-                    android:text="바다를 보러 간 여행 기록 예시입니다. 나중에 실제 데이터와 사진이 표시됩니다."
-                    android:textColor="@color/travel_gray"
-                    android:textSize="13sp" />
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:text="상세 보기 준비중"
-                    android:textColor="@color/travel_orange"
-                    android:textSize="13sp"
-                    android:textStyle="bold" />
-
-            </LinearLayout>
-
-        </LinearLayout>
+        <include layout="@layout/item_travel_record" />
 
     </LinearLayout>
 
