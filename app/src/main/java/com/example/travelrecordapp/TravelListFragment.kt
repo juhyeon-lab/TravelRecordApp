@@ -10,6 +10,8 @@ import androidx.fragment.app.Fragment
 
 class TravelListFragment : Fragment() {
 
+    private val sampleRecord = TravelRecord.sample()
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -31,7 +33,7 @@ class TravelListFragment : Fragment() {
         layoutTravelItem.setOnClickListener {
             Toast.makeText(
                 requireContext(),
-                "상세 화면 이동은 다음 단계에서 구현할 예정입니다.",
+                "${sampleRecord.place} / ${sampleRecord.visitDate}",
                 Toast.LENGTH_SHORT
             ).show()
         }
