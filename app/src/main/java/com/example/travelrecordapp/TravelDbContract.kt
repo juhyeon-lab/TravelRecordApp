@@ -15,7 +15,7 @@ object TravelDbContract {
     const val COL_LONGITUDE = "longitude"
 
     const val CREATE_TABLE = """
-        CREATE TABLE $TABLE_NAME (
+        CREATE TABLE IF NOT EXISTS $TABLE_NAME (
             $COL_NO INTEGER PRIMARY KEY AUTOINCREMENT,
             $COL_PLACE TEXT NOT NULL,
             $COL_VISIT_DATE TEXT NOT NULL,
@@ -27,4 +27,5 @@ object TravelDbContract {
     """
 
     const val DROP_TABLE = "DROP TABLE IF EXISTS $TABLE_NAME"
+    const val SELECT_ALL = "SELECT * FROM $TABLE_NAME ORDER BY $COL_NO DESC"
 }
