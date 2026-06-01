@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 
@@ -19,8 +20,14 @@ class TravelListFragment : Fragment() {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_travel_list, container, false)
 
+        val dbHelper = DBHelper(requireContext())
+
         val btnAddTravel = view.findViewById<Button>(R.id.btnAddTravel)
         val layoutTravelItem = view.findViewById<View>(R.id.layoutTravelItem)
+        val tvListTotalCount = view.findViewById<TextView>(R.id.tvListTotalCount)
+
+        val count = dbHelper.getTravelRecordCount()
+        tvListTotalCount.text = "${count}개"
 
         btnAddTravel.setOnClickListener {
             Toast.makeText(
