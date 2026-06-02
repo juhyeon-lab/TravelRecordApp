@@ -8,27 +8,21 @@ import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 
 class TravelListFragment : Fragment() {
 
     private lateinit var dbHelper: DBHelper
+    private lateinit var travelAdapter: TravelAdapter
 
     private lateinit var btnAddTravel: Button
-    private lateinit var layoutTravelItem: View
     private lateinit var emptyListCard: View
     private lateinit var tvSectionTitle: TextView
 
     private lateinit var tvListTotalCount: TextView
     private lateinit var tvRecentDate: TextView
-
-    private lateinit var tvItemPlace: TextView
-    private lateinit var tvItemDate: TextView
-    private lateinit var tvItemMemo: TextView
-    private lateinit var tvItemAction: TextView
-    private lateinit var tvPhotoLabel: TextView
-
-    private var currentRecord: TravelRecord? = null
-    private val sampleRecord = TravelRecord.sample()
+    private lateinit var recyclerTravel: RecyclerView
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -44,31 +38,25 @@ class TravelListFragment : Fragment() {
         dbHelper = DBHelper(requireContext())
 
         btnAddTravel = view.findViewById(R.id.btnAddTravel)
-        layoutTravelItem = view.findViewById(R.id.layoutTravelItem)
         emptyListCard = view.findViewById(R.id.emptyListCard)
         tvSectionTitle = view.findViewById(R.id.tvSectionTitle)
-
         tvListTotalCount = view.findViewById(R.id.tvListTotalCount)
         tvRecentDate = view.findViewById(R.id.tvRecentDate)
+        recyclerTravel = view.findViewById(R.id.recyclerTravel)
 
-        tvItemPlace = view.findViewById(R.id.tvItemPlace)
-        tvItemDate = view.findViewById(R.id.tvItemDate)
-        tvItemMemo = view.findViewById(R.id.tvItemMemo)
-        tvItemAction = view.findViewById(R.id.tvItemAction)
-        tvPhotoLabel = view.findViewById(R.id.tvPhotoLabel)
-
-        btnAddTravel.setOnClickListener {
-            insertSampleTravelRecord()
-        }
-
-        layoutTravelItem.setOnClickListener {
-            val record = currentRecord ?: sampleRecord
-
+        travelAdapter = TravelAdapter(mutableListOf()) { record ->
             Toast.makeText(
                 requireContext(),
                 "${record.place} / ${record.visitDate}",
                 Toast.LENGTH_SHORT
             ).show()
+        }
+
+        recyclerTravel.layoutManager = LinearLayoutManager(requireContext())
+        recyclerTravel.adapter = travelAdapter
+
+        btnAddTravel.setOnClickListener {
+            insertSampleTravelRecord()
         }
 
         loadTravelRecords()
@@ -77,7 +65,7 @@ class TravelListFragment : Fragment() {
     override fun onResume() {
         super.onResume()
 
-        if (::dbHelper.isInitialized) {
+        if (::dbHelper.isInitialized && ::travelAdapter.isInitialized) {
             loadTravelRecords()
         }
     }
@@ -121,34 +109,18 @@ class TravelListFragment : Fragment() {
 
         if (records.isNotEmpty()) {
             val recentRecord = records[0]
-            currentRecord = recentRecord
 
             tvRecentDate.text = recentRecord.visitDate
             emptyListCard.visibility = View.GONE
-            tvSectionTitle.text = "최근 저장된 여행 기록"
+            tvSectionTitle.text = "저장된 여행 기록"
 
-            bindTravelRecord(recentRecord, false)
+            travelAdapter.updateList(records)
         } else {
-            currentRecord = null
-
             tvRecentDate.text = "준비중"
             emptyListCard.visibility = View.VISIBLE
-            tvSectionTitle.text = "RecyclerView 아이템 미리보기"
+            tvSectionTitle.text = "저장된 여행 기록"
 
-            bindTravelRecord(sampleRecord, true)
-        }
-    }
-
-    private fun bindTravelRecord(record: TravelRecord, isSample: Boolean) {
-        tvItemPlace.text = record.place
-        tvItemDate.text = record.visitDate
-        tvItemMemo.text = record.memo
-        tvPhotoLabel.text = "PHOTO"
-
-        tvItemAction.text = if (isSample) {
-            "상세 보기 준비중"
-        } else {
-            "저장된 기록입니다"
+            travelAdapter.updateList(emptyList())
         }
     }
 }

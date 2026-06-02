@@ -145,12 +145,17 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="26dp"
-            android:text="RecyclerView 아이템 미리보기"
+            android:text="저장된 여행 기록"
             android:textColor="@color/travel_dark"
             android:textSize="18sp"
             android:textStyle="bold" />
 
-        <include layout="@layout/item_travel_record" />
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerTravel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="24dp"
+            android:nestedScrollingEnabled="false" />
 
     </LinearLayout>
 
