@@ -55,6 +55,14 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    fun openTravelListFragment() {
+        changeFragment(TravelListFragment(), tagList)
+    }
+
+    fun openTravelMapFragment() {
+        changeFragment(TravelMapFragment(), tagMap)
+    }
+
     private fun changeFragment(fragment: Fragment, tag: String, addToBackStack: Boolean = true) {
         val currentFragment = supportFragmentManager.findFragmentById(R.id.fragmentContainer)
 

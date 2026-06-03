@@ -59,6 +59,7 @@
                 android:textStyle="bold" />
 
             <TextView
+                android:id="@+id/tvTodaySubMessage"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
@@ -119,6 +120,7 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/cardMapShortcut"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_marginStart="8dp"
@@ -149,6 +151,18 @@
             </LinearLayout>
 
         </LinearLayout>
+
+        <Button
+            android:id="@+id/btnGoMap"
+            android:layout_width="match_parent"
+            android:layout_height="52dp"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/bg_primary_button"
+            android:text="지도에서 여행 기록 보기"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:textSize="15sp"
+            android:textStyle="bold" />
 
         <LinearLayout
             android:id="@+id/cardRecent"
@@ -193,6 +207,7 @@
                     android:orientation="vertical">
 
                     <TextView
+                        android:id="@+id/tvRecentPlace"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="최근 기록이 없습니다"
@@ -201,6 +216,7 @@
                         android:textStyle="bold" />
 
                     <TextView
+                        android:id="@+id/tvRecentMemo"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="6dp"
@@ -238,7 +254,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
                 android:lineSpacingExtra="5dp"
-                android:text="• 여행 기록 목록 RecyclerView 구현\n• 여행 기록 데이터 클래스 작성\n• SQLiteOpenHelper 기반 DBHelper 구현\n• 기록 추가, 수정, 삭제 기능 연결"
+                android:text="• 여행 기록 추가 Activity 구현\n• 상세 화면 이동 구현\n• 수정 및 삭제 기능 구현\n• 사진 선택 Intent 연결"
                 android:textColor="@color/travel_gray"
                 android:textSize="14sp" />
 
