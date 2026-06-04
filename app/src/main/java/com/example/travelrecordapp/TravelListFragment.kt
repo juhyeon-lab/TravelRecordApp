@@ -1,5 +1,6 @@
 package com.example.travelrecordapp
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -56,7 +57,8 @@ class TravelListFragment : Fragment() {
         recyclerTravel.adapter = travelAdapter
 
         btnAddTravel.setOnClickListener {
-            insertSampleTravelRecord()
+            val intent = Intent(requireContext(), AddTravelActivity::class.java)
+            startActivity(intent)
         }
 
         loadTravelRecords()
@@ -67,37 +69,6 @@ class TravelListFragment : Fragment() {
 
         if (::dbHelper.isInitialized && ::travelAdapter.isInitialized) {
             loadTravelRecords()
-        }
-    }
-
-    private fun insertSampleTravelRecord() {
-        val nextNumber = dbHelper.getTravelRecordCount() + 1
-
-        val record = TravelRecord(
-            place = "부산 해운대 $nextNumber",
-            visitDate = "2026-06-01",
-            memo = "SQLite 데이터베이스에 저장된 여행 기록 예시입니다.",
-            photoUri = "",
-            latitude = 35.1587,
-            longitude = 129.1603
-        )
-
-        val result = dbHelper.insertTravelRecord(record)
-
-        if (result != -1L) {
-            Toast.makeText(
-                requireContext(),
-                "여행 기록이 저장되었습니다.",
-                Toast.LENGTH_SHORT
-            ).show()
-
-            loadTravelRecords()
-        } else {
-            Toast.makeText(
-                requireContext(),
-                "여행 기록 저장에 실패했습니다.",
-                Toast.LENGTH_SHORT
-            ).show()
         }
     }
 
