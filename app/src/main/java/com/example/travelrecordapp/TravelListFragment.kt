@@ -20,7 +20,6 @@ class TravelListFragment : Fragment() {
     private lateinit var btnAddTravel: Button
     private lateinit var emptyListCard: View
     private lateinit var tvSectionTitle: TextView
-
     private lateinit var tvListTotalCount: TextView
     private lateinit var tvRecentDate: TextView
     private lateinit var recyclerTravel: RecyclerView

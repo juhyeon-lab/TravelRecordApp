@@ -22,12 +22,17 @@ class AddTravelActivity : AppCompatActivity() {
     private lateinit var btnSaveTravel: Button
     private lateinit var btnCancel: Button
 
+    private lateinit var dbHelper: DBHelper
+
     private var selectedDate = ""
     private var selectedTime = ""
+    private var selectedPhotoUri = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_travel)
+
+        dbHelper = DBHelper(this)
 
         etPlace = findViewById(R.id.etPlace)
         etMemo = findViewById(R.id.etMemo)
@@ -56,7 +61,7 @@ class AddTravelActivity : AppCompatActivity() {
         }
 
         btnSaveTravel.setOnClickListener {
-            checkInputForNextStep()
+            saveTravelRecord()
         }
 
         btnCancel.setOnClickListener {
@@ -123,7 +128,7 @@ class AddTravelActivity : AppCompatActivity() {
         tvSelectedDateTime.text = "$dateText $timeText"
     }
 
-    private fun checkInputForNextStep() {
+    private fun saveTravelRecord() {
         val place = etPlace.text.toString().trim()
         val memo = etMemo.text.toString().trim()
 
@@ -137,13 +142,28 @@ class AddTravelActivity : AppCompatActivity() {
             return
         }
 
-        Toast.makeText(
-            this,
-            "입력 확인 완료: $place / $selectedDate",
-            Toast.LENGTH_SHORT
-        ).show()
+        val visitDate = if (selectedTime.isBlank()) {
+            selectedDate
+        } else {
+            "$selectedDate $selectedTime"
+        }
 
-        // 실제 SQLite 저장은 다음 단계에서 구현합니다.
-        // 현재는 추가 Activity 화면과 입력 검증까지만 확인합니다.
+        val record = TravelRecord(
+            place = place,
+            visitDate = visitDate,
+            memo = memo,
+            photoUri = selectedPhotoUri,
+            latitude = 0.0,
+            longitude = 0.0
+        )
+
+        val result = dbHelper.insertTravelRecord(record)
+
+        if (result != -1L) {
+            Toast.makeText(this, "여행 기록이 저장되었습니다.", Toast.LENGTH_SHORT).show()
+            finish()
+        } else {
+            Toast.makeText(this, "여행 기록 저장에 실패했습니다.", Toast.LENGTH_SHORT).show()
+        }
     }
 }
