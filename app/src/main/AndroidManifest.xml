@@ -12,6 +12,10 @@
         android:theme="@style/Theme.TravelRecordApp">
 
         <activity
+            android:name=".TravelDetailActivity"
+            android:exported="false" />
+
+        <activity
             android:name=".AddTravelActivity"
             android:exported="false" />
 

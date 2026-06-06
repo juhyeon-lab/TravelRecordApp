@@ -7,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -45,11 +44,9 @@ class TravelListFragment : Fragment() {
         recyclerTravel = view.findViewById(R.id.recyclerTravel)
 
         travelAdapter = TravelAdapter(mutableListOf()) { record ->
-            Toast.makeText(
-                requireContext(),
-                "${record.place} / ${record.visitDate}",
-                Toast.LENGTH_SHORT
-            ).show()
+            val intent = Intent(requireContext(), TravelDetailActivity::class.java)
+            intent.putExtra(TravelDetailActivity.EXTRA_RECORD_NO, record.no)
+            startActivity(intent)
         }
 
         recyclerTravel.layoutManager = LinearLayoutManager(requireContext())
