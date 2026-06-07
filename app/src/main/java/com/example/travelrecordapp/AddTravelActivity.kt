@@ -12,6 +12,8 @@ import java.util.Calendar
 
 class AddTravelActivity : AppCompatActivity() {
 
+    private lateinit var tvAddTravelTitle: TextView
+    private lateinit var tvAddTravelDesc: TextView
     private lateinit var etPlace: EditText
     private lateinit var etMemo: EditText
     private lateinit var tvSelectedDateTime: TextView
@@ -28,12 +30,17 @@ class AddTravelActivity : AppCompatActivity() {
     private var selectedTime = ""
     private var selectedPhotoUri = ""
 
+    private var editRecordNo = -1
+    private var currentEditRecord: TravelRecord? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_travel)
 
         dbHelper = DBHelper(this)
 
+        tvAddTravelTitle = findViewById(R.id.tvAddTravelTitle)
+        tvAddTravelDesc = findViewById(R.id.tvAddTravelDesc)
         etPlace = findViewById(R.id.etPlace)
         etMemo = findViewById(R.id.etMemo)
         tvSelectedDateTime = findViewById(R.id.tvSelectedDateTime)
@@ -43,6 +50,12 @@ class AddTravelActivity : AppCompatActivity() {
         btnPickPhoto = findViewById(R.id.btnPickPhoto)
         btnSaveTravel = findViewById(R.id.btnSaveTravel)
         btnCancel = findViewById(R.id.btnCancel)
+
+        editRecordNo = intent.getIntExtra(TravelDetailActivity.EXTRA_RECORD_NO, -1)
+
+        if (editRecordNo != -1) {
+            loadRecordForEdit(editRecordNo)
+        }
 
         btnPickDate.setOnClickListener {
             showDatePicker()
@@ -69,12 +82,65 @@ class AddTravelActivity : AppCompatActivity() {
         }
     }
 
+    private fun loadRecordForEdit(recordNo: Int) {
+        val record = dbHelper.getTravelRecord(recordNo)
+
+        if (record == null) {
+            Toast.makeText(this, "수정할 여행 기록을 불러올 수 없습니다.", Toast.LENGTH_SHORT).show()
+            finish()
+            return
+        }
+
+        currentEditRecord = record
+
+        tvAddTravelTitle.text = "여행 기록 수정"
+        tvAddTravelDesc.text = "저장된 여행 기록을 수정합니다."
+        btnSaveTravel.text = "수정 완료"
+
+        etPlace.setText(record.place)
+        etMemo.setText(record.memo)
+
+        selectedPhotoUri = record.photoUri
+
+        if (record.visitDate.contains(" ")) {
+            selectedDate = record.visitDate.substringBefore(" ")
+            selectedTime = record.visitDate.substringAfter(" ")
+        } else {
+            selectedDate = record.visitDate
+            selectedTime = ""
+        }
+
+        updateSelectedDateTimeText()
+
+        if (record.hasPhoto()) {
+            tvPhotoStatus.text = "기존 사진이 저장되어 있습니다."
+        } else {
+            tvPhotoStatus.text = "사진 선택 기능은 이후 단계에서 구현"
+        }
+    }
+
     private fun showDatePicker() {
         val calendar = Calendar.getInstance()
 
-        val year = calendar.get(Calendar.YEAR)
-        val month = calendar.get(Calendar.MONTH)
-        val day = calendar.get(Calendar.DAY_OF_MONTH)
+        val year = if (selectedDate.isNotBlank()) {
+            selectedDate.substringBefore("-").toIntOrNull() ?: calendar.get(Calendar.YEAR)
+        } else {
+            calendar.get(Calendar.YEAR)
+        }
+
+        val month = if (selectedDate.isNotBlank()) {
+            selectedDate.split("-").getOrNull(1)?.toIntOrNull()?.minus(1)
+                ?: calendar.get(Calendar.MONTH)
+        } else {
+            calendar.get(Calendar.MONTH)
+        }
+
+        val day = if (selectedDate.isNotBlank()) {
+            selectedDate.split("-").getOrNull(2)?.toIntOrNull()
+                ?: calendar.get(Calendar.DAY_OF_MONTH)
+        } else {
+            calendar.get(Calendar.DAY_OF_MONTH)
+        }
 
         val dialog = DatePickerDialog(
             this,
@@ -99,8 +165,19 @@ class AddTravelActivity : AppCompatActivity() {
     private fun showTimePicker() {
         val calendar = Calendar.getInstance()
 
-        val hour = calendar.get(Calendar.HOUR_OF_DAY)
-        val minute = calendar.get(Calendar.MINUTE)
+        val hour = if (selectedTime.isNotBlank()) {
+            selectedTime.substringBefore(":").toIntOrNull()
+                ?: calendar.get(Calendar.HOUR_OF_DAY)
+        } else {
+            calendar.get(Calendar.HOUR_OF_DAY)
+        }
+
+        val minute = if (selectedTime.isNotBlank()) {
+            selectedTime.substringAfter(":").toIntOrNull()
+                ?: calendar.get(Calendar.MINUTE)
+        } else {
+            calendar.get(Calendar.MINUTE)
+        }
 
         val dialog = TimePickerDialog(
             this,
@@ -148,6 +225,14 @@ class AddTravelActivity : AppCompatActivity() {
             "$selectedDate $selectedTime"
         }
 
+        if (editRecordNo == -1) {
+            insertTravelRecord(place, visitDate, memo)
+        } else {
+            updateTravelRecord(place, visitDate, memo)
+        }
+    }
+
+    private fun insertTravelRecord(place: String, visitDate: String, memo: String) {
         val record = TravelRecord(
             place = place,
             visitDate = visitDate,
@@ -164,6 +249,34 @@ class AddTravelActivity : AppCompatActivity() {
             finish()
         } else {
             Toast.makeText(this, "여행 기록 저장에 실패했습니다.", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun updateTravelRecord(place: String, visitDate: String, memo: String) {
+        val oldRecord = currentEditRecord
+
+        if (oldRecord == null) {
+            Toast.makeText(this, "수정할 기록 정보가 없습니다.", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        val updatedRecord = TravelRecord(
+            no = editRecordNo,
+            place = place,
+            visitDate = visitDate,
+            memo = memo,
+            photoUri = oldRecord.photoUri,
+            latitude = oldRecord.latitude,
+            longitude = oldRecord.longitude
+        )
+
+        val result = dbHelper.updateTravelRecord(updatedRecord)
+
+        if (result > 0) {
+            Toast.makeText(this, "여행 기록이 수정되었습니다.", Toast.LENGTH_SHORT).show()
+            finish()
+        } else {
+            Toast.makeText(this, "여행 기록 수정에 실패했습니다.", Toast.LENGTH_SHORT).show()
         }
     }
 }

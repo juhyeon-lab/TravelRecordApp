@@ -1,5 +1,6 @@
 package com.example.travelrecordapp
 
+import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.widget.Button
@@ -51,18 +52,24 @@ class TravelDetailActivity : AppCompatActivity() {
             return
         }
 
-        loadTravelRecord()
-
         btnEditTravel.setOnClickListener {
-            Toast.makeText(
-                this,
-                "수정 기능은 다음 단계에서 구현합니다.",
-                Toast.LENGTH_SHORT
-            ).show()
+            val intent = Intent(this, AddTravelActivity::class.java)
+            intent.putExtra(EXTRA_RECORD_NO, recordNo)
+            startActivity(intent)
         }
 
         btnBackToList.setOnClickListener {
             finish()
+        }
+
+        loadTravelRecord()
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        if (recordNo != -1 && ::dbHelper.isInitialized) {
+            loadTravelRecord()
         }
     }
 

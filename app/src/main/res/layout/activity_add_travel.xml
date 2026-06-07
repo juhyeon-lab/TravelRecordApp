@@ -12,6 +12,7 @@
         android:padding="22dp">
 
         <TextView
+            android:id="@+id/tvAddTravelTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="새 여행 기록 추가"
@@ -20,6 +21,7 @@
             android:textStyle="bold" />
 
         <TextView
+            android:id="@+id/tvAddTravelDesc"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
