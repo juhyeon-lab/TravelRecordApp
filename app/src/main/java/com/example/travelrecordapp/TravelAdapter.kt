@@ -1,6 +1,7 @@
 package com.example.travelrecordapp
 
 import android.net.Uri
+import android.view.ContextMenu
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,7 +11,9 @@ import androidx.recyclerview.widget.RecyclerView
 
 class TravelAdapter(
     private val travelList: MutableList<TravelRecord>,
-    private val onItemClick: (TravelRecord) -> Unit
+    private val onItemClick: (TravelRecord) -> Unit,
+    private val onEditClick: (TravelRecord) -> Unit,
+    private val onDeleteClick: (TravelRecord) -> Unit
 ) : RecyclerView.Adapter<TravelAdapter.TravelViewHolder>() {
 
     class TravelViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -35,7 +38,9 @@ class TravelAdapter(
 
         holder.tvItemPlace.text = record.place
         holder.tvItemDate.text = record.visitDate
-        holder.tvItemMemo.text = record.memo
+        holder.tvItemMemo.text = record.memo.ifBlank {
+            "작성된 메모가 없습니다."
+        }
         holder.tvItemAction.text = "상세 보기"
 
         if (record.photoUri.isNotBlank()) {
@@ -50,6 +55,21 @@ class TravelAdapter(
 
         holder.layoutTravelItem.setOnClickListener {
             onItemClick(record)
+        }
+
+        holder.layoutTravelItem.isLongClickable = true
+        holder.layoutTravelItem.setOnCreateContextMenuListener { menu: ContextMenu, _, _ ->
+            menu.setHeaderTitle(record.place)
+
+            menu.add("수정").setOnMenuItemClickListener {
+                onEditClick(record)
+                true
+            }
+
+            menu.add("삭제").setOnMenuItemClickListener {
+                onDeleteClick(record)
+                true
+            }
         }
     }
 
