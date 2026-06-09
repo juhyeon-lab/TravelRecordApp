@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.PopupMenu
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
@@ -19,11 +20,14 @@ class TravelListFragment : Fragment() {
     private lateinit var travelAdapter: TravelAdapter
 
     private lateinit var btnAddTravel: Button
+    private lateinit var btnListOption: Button
     private lateinit var emptyListCard: View
     private lateinit var tvSectionTitle: TextView
     private lateinit var tvListTotalCount: TextView
     private lateinit var tvRecentDate: TextView
     private lateinit var recyclerTravel: RecyclerView
+
+    private var isLatestOrder = true
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -39,6 +43,7 @@ class TravelListFragment : Fragment() {
         dbHelper = DBHelper(requireContext())
 
         btnAddTravel = view.findViewById(R.id.btnAddTravel)
+        btnListOption = view.findViewById(R.id.btnListOption)
         emptyListCard = view.findViewById(R.id.emptyListCard)
         tvSectionTitle = view.findViewById(R.id.tvSectionTitle)
         tvListTotalCount = view.findViewById(R.id.tvListTotalCount)
@@ -70,6 +75,10 @@ class TravelListFragment : Fragment() {
             startActivity(intent)
         }
 
+        btnListOption.setOnClickListener {
+            showListOptionMenu(it)
+        }
+
         loadTravelRecords()
     }
 
@@ -81,20 +90,72 @@ class TravelListFragment : Fragment() {
         }
     }
 
+    private fun showListOptionMenu(anchorView: View) {
+        val popupMenu = PopupMenu(requireContext(), anchorView)
+
+        popupMenu.menu.add("최신순 정렬")
+        popupMenu.menu.add("오래된순 정렬")
+        popupMenu.menu.add("전체 삭제")
+        popupMenu.menu.add("앱 정보")
+
+        popupMenu.setOnMenuItemClickListener { item ->
+            when (item.title.toString()) {
+                "최신순 정렬" -> {
+                    isLatestOrder = true
+                    loadTravelRecords()
+                    Toast.makeText(requireContext(), "최신순으로 정렬했습니다.", Toast.LENGTH_SHORT).show()
+                    true
+                }
+
+                "오래된순 정렬" -> {
+                    isLatestOrder = false
+                    loadTravelRecords()
+                    Toast.makeText(requireContext(), "오래된순으로 정렬했습니다.", Toast.LENGTH_SHORT).show()
+                    true
+                }
+
+                "전체 삭제" -> {
+                    showDeleteAllConfirmDialog()
+                    true
+                }
+
+                "앱 정보" -> {
+                    showAppInfoDialog()
+                    true
+                }
+
+                else -> false
+            }
+        }
+
+        popupMenu.show()
+    }
+
     private fun loadTravelRecords() {
         val records = dbHelper.getAllTravelRecords()
-        val count = records.size
+        val sortedRecords = if (isLatestOrder) {
+            records
+        } else {
+            records.reversed()
+        }
+
+        val count = sortedRecords.size
 
         tvListTotalCount.text = "${count}개"
 
-        if (records.isNotEmpty()) {
+        if (sortedRecords.isNotEmpty()) {
             val recentRecord = records[0]
 
             tvRecentDate.text = recentRecord.visitDate
             emptyListCard.visibility = View.GONE
-            tvSectionTitle.text = "저장된 여행 기록"
 
-            travelAdapter.updateList(records)
+            tvSectionTitle.text = if (isLatestOrder) {
+                "저장된 여행 기록"
+            } else {
+                "저장된 여행 기록 - 오래된순"
+            }
+
+            travelAdapter.updateList(sortedRecords)
         } else {
             tvRecentDate.text = "준비중"
             emptyListCard.visibility = View.VISIBLE
@@ -133,5 +194,49 @@ class TravelListFragment : Fragment() {
                 Toast.LENGTH_SHORT
             ).show()
         }
+    }
+
+    private fun showDeleteAllConfirmDialog() {
+        val count = dbHelper.getTravelRecordCount()
+
+        if (count == 0) {
+            Toast.makeText(requireContext(), "삭제할 여행 기록이 없습니다.", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        AlertDialog.Builder(requireContext())
+            .setTitle("전체 삭제")
+            .setMessage("저장된 여행 기록 ${count}개를 모두 삭제할까요?")
+            .setPositiveButton("전체 삭제") { _, _ ->
+                val result = dbHelper.deleteAllTravelRecords()
+
+                Toast.makeText(
+                    requireContext(),
+                    "여행 기록 ${result}개가 삭제되었습니다.",
+                    Toast.LENGTH_SHORT
+                ).show()
+
+                loadTravelRecords()
+            }
+            .setNegativeButton("취소", null)
+            .show()
+    }
+
+    private fun showAppInfoDialog() {
+        AlertDialog.Builder(requireContext())
+            .setTitle("앱 정보")
+            .setMessage(
+                "여행기록앱\n\n" +
+                        "모바일프로그래밍 기말 프로젝트입니다.\n\n" +
+                        "구현 기능\n" +
+                        "- Fragment 화면 전환\n" +
+                        "- RecyclerView 여행 기록 목록\n" +
+                        "- SQLiteOpenHelper 기반 DB 저장\n" +
+                        "- 여행 기록 추가, 조회, 수정, 삭제\n" +
+                        "- 컨텍스트 메뉴\n" +
+                        "- 옵션 메뉴"
+            )
+            .setPositiveButton("확인", null)
+            .show()
     }
 }
