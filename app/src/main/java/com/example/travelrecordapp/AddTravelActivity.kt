@@ -2,6 +2,8 @@ package com.example.travelrecordapp
 
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
@@ -32,6 +34,10 @@ class AddTravelActivity : AppCompatActivity() {
 
     private var editRecordNo = -1
     private var currentEditRecord: TravelRecord? = null
+
+    companion object {
+        private const val REQUEST_PICK_IMAGE = 1001
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -66,11 +72,7 @@ class AddTravelActivity : AppCompatActivity() {
         }
 
         btnPickPhoto.setOnClickListener {
-            Toast.makeText(
-                this,
-                "사진 선택 기능은 이후 단계에서 구현합니다.",
-                Toast.LENGTH_SHORT
-            ).show()
+            openGallery()
         }
 
         btnSaveTravel.setOnClickListener {
@@ -115,7 +117,7 @@ class AddTravelActivity : AppCompatActivity() {
         if (record.hasPhoto()) {
             tvPhotoStatus.text = "기존 사진이 저장되어 있습니다."
         } else {
-            tvPhotoStatus.text = "사진 선택 기능은 이후 단계에서 구현"
+            tvPhotoStatus.text = "선택된 사진이 없습니다"
         }
     }
 
@@ -205,6 +207,43 @@ class AddTravelActivity : AppCompatActivity() {
         tvSelectedDateTime.text = "$dateText $timeText"
     }
 
+    private fun openGallery() {
+        val intent = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
+            type = "image/*"
+            addCategory(Intent.CATEGORY_OPENABLE)
+            addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+            addFlags(Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION)
+        }
+
+        startActivityForResult(intent, REQUEST_PICK_IMAGE)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (requestCode == REQUEST_PICK_IMAGE && resultCode == RESULT_OK) {
+            val imageUri: Uri? = data?.data
+
+            if (imageUri != null) {
+                selectedPhotoUri = imageUri.toString()
+
+                try {
+                    contentResolver.takePersistableUriPermission(
+                        imageUri,
+                        Intent.FLAG_GRANT_READ_URI_PERMISSION
+                    )
+                } catch (e: SecurityException) {
+                    e.printStackTrace()
+                }
+
+                tvPhotoStatus.text = "사진이 선택되었습니다."
+                Toast.makeText(this, "사진이 선택되었습니다.", Toast.LENGTH_SHORT).show()
+            } else {
+                Toast.makeText(this, "사진을 선택하지 못했습니다.", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
     private fun saveTravelRecord() {
         val place = etPlace.text.toString().trim()
         val memo = etMemo.text.toString().trim()
@@ -265,7 +304,7 @@ class AddTravelActivity : AppCompatActivity() {
             place = place,
             visitDate = visitDate,
             memo = memo,
-            photoUri = oldRecord.photoUri,
+            photoUri = selectedPhotoUri,
             latitude = oldRecord.latitude,
             longitude = oldRecord.longitude
         )

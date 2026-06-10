@@ -96,7 +96,6 @@ class TravelListFragment : Fragment() {
         popupMenu.menu.add("최신순 정렬")
         popupMenu.menu.add("오래된순 정렬")
         popupMenu.menu.add("전체 삭제")
-        popupMenu.menu.add("앱 정보")
 
         popupMenu.setOnMenuItemClickListener { item ->
             when (item.title.toString()) {
@@ -116,11 +115,6 @@ class TravelListFragment : Fragment() {
 
                 "전체 삭제" -> {
                     showDeleteAllConfirmDialog()
-                    true
-                }
-
-                "앱 정보" -> {
-                    showAppInfoDialog()
                     true
                 }
 
@@ -219,24 +213,6 @@ class TravelListFragment : Fragment() {
                 loadTravelRecords()
             }
             .setNegativeButton("취소", null)
-            .show()
-    }
-
-    private fun showAppInfoDialog() {
-        AlertDialog.Builder(requireContext())
-            .setTitle("앱 정보")
-            .setMessage(
-                "여행기록앱\n\n" +
-                        "모바일프로그래밍 기말 프로젝트입니다.\n\n" +
-                        "구현 기능\n" +
-                        "- Fragment 화면 전환\n" +
-                        "- RecyclerView 여행 기록 목록\n" +
-                        "- SQLiteOpenHelper 기반 DB 저장\n" +
-                        "- 여행 기록 추가, 조회, 수정, 삭제\n" +
-                        "- 컨텍스트 메뉴\n" +
-                        "- 옵션 메뉴"
-            )
-            .setPositiveButton("확인", null)
             .show()
     }
 }
