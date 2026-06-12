@@ -1,38 +1,39 @@
 package com.example.travelrecordapp
 
-import android.content.res.ColorStateList
 import android.os.Bundle
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var btnHome: Button
-    private lateinit var btnList: Button
+    private lateinit var btnTravelList: Button
     private lateinit var btnMap: Button
     private lateinit var btnInfo: Button
+    private lateinit var btnSchedule: Button
 
-    private val tagHome = "HOME"
-    private val tagList = "LIST"
-    private val tagMap = "MAP"
-    private val tagInfo = "INFO"
+    private val tagHome = "home"
+    private val tagList = "list"
+    private val tagMap = "map"
+    private val tagInfo = "info"
+    private val tagSchedule = "schedule"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
         btnHome = findViewById(R.id.btnHome)
-        btnList = findViewById(R.id.btnList)
+        btnTravelList = findViewById(R.id.btnTravelList)
         btnMap = findViewById(R.id.btnMap)
         btnInfo = findViewById(R.id.btnInfo)
+        btnSchedule = findViewById(R.id.btnSchedule)
 
         btnHome.setOnClickListener {
             changeFragment(HomeFragment(), tagHome)
         }
 
-        btnList.setOnClickListener {
+        btnTravelList.setOnClickListener {
             changeFragment(TravelListFragment(), tagList)
         }
 
@@ -44,14 +45,65 @@ class MainActivity : AppCompatActivity() {
             changeFragment(InfoFragment(), tagInfo)
         }
 
-        supportFragmentManager.addOnBackStackChangedListener {
-            updateSelectedButtonByCurrentFragment()
+        btnSchedule.setOnClickListener {
+            changeFragment(ScheduleFragment(), tagSchedule)
         }
 
         if (savedInstanceState == null) {
-            changeFragment(HomeFragment(), tagHome, false)
-        } else {
-            updateSelectedButtonByCurrentFragment()
+            changeFragment(HomeFragment(), tagHome)
+        }
+    }
+
+    private fun changeFragment(fragment: Fragment, tag: String) {
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.fragmentContainer, fragment, tag)
+            .addToBackStack(tag)
+            .commit()
+
+        updateTabButton(tag)
+    }
+
+    private fun updateTabButton(selectedTag: String) {
+        val selectedColor = getColor(R.color.travel_blue)
+        val unselectedColor = getColor(R.color.nav_unselected)
+
+        btnHome.setBackgroundColor(unselectedColor)
+        btnTravelList.setBackgroundColor(unselectedColor)
+        btnMap.setBackgroundColor(unselectedColor)
+        btnInfo.setBackgroundColor(unselectedColor)
+        btnSchedule.setBackgroundColor(unselectedColor)
+
+        btnHome.setTextColor(getColor(R.color.travel_dark))
+        btnTravelList.setTextColor(getColor(R.color.travel_dark))
+        btnMap.setTextColor(getColor(R.color.travel_dark))
+        btnInfo.setTextColor(getColor(R.color.travel_dark))
+        btnSchedule.setTextColor(getColor(R.color.travel_dark))
+
+        when (selectedTag) {
+            tagHome -> {
+                btnHome.setBackgroundColor(selectedColor)
+                btnHome.setTextColor(getColor(R.color.white))
+            }
+
+            tagList -> {
+                btnTravelList.setBackgroundColor(selectedColor)
+                btnTravelList.setTextColor(getColor(R.color.white))
+            }
+
+            tagMap -> {
+                btnMap.setBackgroundColor(selectedColor)
+                btnMap.setTextColor(getColor(R.color.white))
+            }
+
+            tagInfo -> {
+                btnInfo.setBackgroundColor(selectedColor)
+                btnInfo.setTextColor(getColor(R.color.white))
+            }
+
+            tagSchedule -> {
+                btnSchedule.setBackgroundColor(selectedColor)
+                btnSchedule.setTextColor(getColor(R.color.white))
+            }
         }
     }
 
@@ -61,53 +113,5 @@ class MainActivity : AppCompatActivity() {
 
     fun openTravelMapFragment() {
         changeFragment(TravelMapFragment(), tagMap)
-    }
-
-    private fun changeFragment(fragment: Fragment, tag: String, addToBackStack: Boolean = true) {
-        val currentFragment = supportFragmentManager.findFragmentById(R.id.fragmentContainer)
-
-        if (currentFragment != null && currentFragment.tag == tag) {
-            return
-        }
-
-        val transaction = supportFragmentManager.beginTransaction()
-            .replace(R.id.fragmentContainer, fragment, tag)
-
-        if (addToBackStack) {
-            transaction.addToBackStack(tag)
-        }
-
-        transaction.commit()
-        updateSelectedButton(tag)
-    }
-
-    private fun updateSelectedButtonByCurrentFragment() {
-        val currentFragment = supportFragmentManager.findFragmentById(R.id.fragmentContainer)
-        val currentTag = currentFragment?.tag ?: tagHome
-        updateSelectedButton(currentTag)
-    }
-
-    private fun updateSelectedButton(selectedTag: String) {
-        val selectedColor = ContextCompat.getColor(this, R.color.travel_blue)
-        val unselectedColor = ContextCompat.getColor(this, R.color.nav_unselected)
-        val selectedTextColor = ContextCompat.getColor(this, R.color.white)
-        val unselectedTextColor = ContextCompat.getColor(this, R.color.travel_dark)
-
-        val buttons = listOf(
-            Pair(btnHome, tagHome),
-            Pair(btnList, tagList),
-            Pair(btnMap, tagMap),
-            Pair(btnInfo, tagInfo)
-        )
-
-        for ((button, tag) in buttons) {
-            if (tag == selectedTag) {
-                button.backgroundTintList = ColorStateList.valueOf(selectedColor)
-                button.setTextColor(selectedTextColor)
-            } else {
-                button.backgroundTintList = ColorStateList.valueOf(unselectedColor)
-                button.setTextColor(unselectedTextColor)
-            }
-        }
     }
 }

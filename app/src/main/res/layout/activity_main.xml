@@ -44,38 +44,35 @@
         android:layout_weight="1" />
 
     <LinearLayout
-        android:id="@+id/bottomNav"
+        android:id="@+id/bottomNavigation"
         android:layout_width="match_parent"
-        android:layout_height="76dp"
+        android:layout_height="72dp"
+        android:layout_gravity="bottom"
         android:background="@color/white"
-        android:elevation="8dp"
-        android:gravity="center"
         android:orientation="horizontal"
-        android:paddingStart="8dp"
-        android:paddingTop="8dp"
-        android:paddingEnd="8dp"
-        android:paddingBottom="8dp">
+        android:padding="8dp">
 
         <Button
             android:id="@+id/btnHome"
             android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_margin="4dp"
+            android:layout_height="50dp"
+            android:layout_marginEnd="4dp"
             android:layout_weight="1"
             android:backgroundTint="@color/travel_blue"
-            android:text="@string/nav_home"
+            android:text="홈"
             android:textAllCaps="false"
             android:textColor="@color/white"
             android:textSize="13sp" />
 
         <Button
-            android:id="@+id/btnList"
+            android:id="@+id/btnTravelList"
             android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_margin="4dp"
+            android:layout_height="50dp"
+            android:layout_marginStart="4dp"
+            android:layout_marginEnd="4dp"
             android:layout_weight="1"
             android:backgroundTint="@color/nav_unselected"
-            android:text="@string/nav_list"
+            android:text="기록"
             android:textAllCaps="false"
             android:textColor="@color/travel_dark"
             android:textSize="13sp" />
@@ -83,11 +80,12 @@
         <Button
             android:id="@+id/btnMap"
             android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_margin="4dp"
+            android:layout_height="50dp"
+            android:layout_marginStart="4dp"
+            android:layout_marginEnd="4dp"
             android:layout_weight="1"
             android:backgroundTint="@color/nav_unselected"
-            android:text="@string/nav_map"
+            android:text="지도"
             android:textAllCaps="false"
             android:textColor="@color/travel_dark"
             android:textSize="13sp" />
@@ -95,11 +93,24 @@
         <Button
             android:id="@+id/btnInfo"
             android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_margin="4dp"
+            android:layout_height="50dp"
+            android:layout_marginStart="4dp"
+            android:layout_marginEnd="4dp"
             android:layout_weight="1"
             android:backgroundTint="@color/nav_unselected"
             android:text="통계"
+            android:textAllCaps="false"
+            android:textColor="@color/travel_dark"
+            android:textSize="13sp" />
+
+        <Button
+            android:id="@+id/btnSchedule"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:layout_marginStart="4dp"
+            android:layout_weight="1"
+            android:backgroundTint="@color/nav_unselected"
+            android:text="일정"
             android:textAllCaps="false"
             android:textColor="@color/travel_dark"
             android:textSize="13sp" />
