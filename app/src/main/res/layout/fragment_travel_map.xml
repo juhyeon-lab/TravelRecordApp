@@ -1,53 +1,64 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="20dp">
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/map_title"
-        android:textColor="@color/travel_dark"
-        android:textSize="24sp"
-        android:textStyle="bold" />
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:text="@string/map_desc"
-        android:textColor="@color/travel_gray"
-        android:textSize="15sp" />
+    android:background="@color/travel_bg"
+    android:fillViewport="true">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="260dp"
-        android:layout_marginTop="24dp"
-        android:background="@color/card_green"
-        android:elevation="4dp"
-        android:gravity="center"
+        android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="20dp">
+        android:paddingStart="20dp"
+        android:paddingTop="20dp"
+        android:paddingEnd="20dp"
+        android:paddingBottom="100dp">
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="지도 영역"
+            android:text="여행 지도"
             android:textColor="@color/travel_dark"
-            android:textSize="24sp"
+            android:textSize="25sp"
             android:textStyle="bold" />
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            android:gravity="center"
-            android:text="이 화면은 나중에 Google Map API와 연결됩니다."
+            android:layout_marginTop="8dp"
+            android:text="Google Map API와 연결하여 여행 위치를 표시합니다."
             android:textColor="@color/travel_gray"
+            android:textSize="15sp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="22dp"
+            android:background="@drawable/bg_card_white"
+            android:elevation="4dp"
+            android:orientation="vertical"
+            android:padding="14dp">
+
+            <androidx.fragment.app.FragmentContainerView
+                android:id="@+id/googleMapFragment"
+                android:name="com.google.android.gms.maps.SupportMapFragment"
+                android:layout_width="match_parent"
+                android:layout_height="430dp" />
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tvMapStatus"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="18dp"
+            android:background="@drawable/bg_card_yellow"
+            android:lineSpacingExtra="4dp"
+            android:padding="14dp"
+            android:text="지도 연결 준비 중입니다."
+            android:textColor="@color/travel_dark"
             android:textSize="15sp" />
 
     </LinearLayout>
 
-</LinearLayout>
+</ScrollView>
