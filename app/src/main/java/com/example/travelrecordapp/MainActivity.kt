@@ -1,5 +1,6 @@
 package com.example.travelrecordapp
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
@@ -18,6 +19,11 @@ class MainActivity : AppCompatActivity() {
     private val tagMap = "map"
     private val tagInfo = "info"
     private val tagSchedule = "schedule"
+
+    companion object {
+        const val EXTRA_OPEN_MAP = "open_map"
+        const val EXTRA_FOCUS_RECORD_NO = "focus_record_no"
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -50,6 +56,24 @@ class MainActivity : AppCompatActivity() {
         }
 
         if (savedInstanceState == null) {
+            handleStartIntent()
+        }
+    }
+
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        setIntent(intent)
+        handleStartIntent()
+    }
+
+    private fun handleStartIntent() {
+        val openMap = intent.getBooleanExtra(EXTRA_OPEN_MAP, false)
+        val focusRecordNo = intent.getIntExtra(EXTRA_FOCUS_RECORD_NO, -1)
+
+        if (openMap) {
+            val mapFragment = TravelMapFragment.newInstance(focusRecordNo)
+            changeFragment(mapFragment, tagMap)
+        } else {
             changeFragment(HomeFragment(), tagHome)
         }
     }

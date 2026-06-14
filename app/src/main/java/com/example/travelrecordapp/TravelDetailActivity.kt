@@ -19,6 +19,7 @@ class TravelDetailActivity : AppCompatActivity() {
     private lateinit var tvDetailDate: TextView
     private lateinit var tvDetailMemo: TextView
     private lateinit var tvDetailLocation: TextView
+    private lateinit var btnShowMap: Button
     private lateinit var btnEditTravel: Button
     private lateinit var btnBackToList: Button
 
@@ -41,6 +42,7 @@ class TravelDetailActivity : AppCompatActivity() {
         tvDetailDate = findViewById(R.id.tvDetailDate)
         tvDetailMemo = findViewById(R.id.tvDetailMemo)
         tvDetailLocation = findViewById(R.id.tvDetailLocation)
+        btnShowMap = findViewById(R.id.btnShowMap)
         btnEditTravel = findViewById(R.id.btnEditTravel)
         btnBackToList = findViewById(R.id.btnBackToList)
 
@@ -56,6 +58,25 @@ class TravelDetailActivity : AppCompatActivity() {
             val intent = Intent(this, AddTravelActivity::class.java)
             intent.putExtra(EXTRA_RECORD_NO, recordNo)
             startActivity(intent)
+        }
+
+        btnShowMap.setOnClickListener {
+            val record = currentRecord
+
+            if (record == null || !record.hasLocation()) {
+                Toast.makeText(
+                    this,
+                    "이 여행 기록에는 아직 위치 정보가 없습니다.",
+                    Toast.LENGTH_SHORT
+                ).show()
+            } else {
+                val intent = Intent(this, MainActivity::class.java)
+                intent.putExtra(MainActivity.EXTRA_OPEN_MAP, true)
+                intent.putExtra(MainActivity.EXTRA_FOCUS_RECORD_NO, record.no)
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP)
+                startActivity(intent)
+                finish()
+            }
         }
 
         btnBackToList.setOnClickListener {
@@ -91,9 +112,16 @@ class TravelDetailActivity : AppCompatActivity() {
         }
 
         if (record.hasLocation()) {
-            tvDetailLocation.text = "위도: ${record.latitude}\n경도: ${record.longitude}"
+            tvDetailLocation.text =
+                "위치 정보가 저장되어 있습니다.\n" +
+                        "위도: ${String.format("%.5f", record.latitude)}\n" +
+                        "경도: ${String.format("%.5f", record.longitude)}"
+            btnShowMap.isEnabled = true
+            btnShowMap.text = "지도에서 위치 보기"
         } else {
             tvDetailLocation.text = "위치 정보가 아직 저장되지 않았습니다."
+            btnShowMap.isEnabled = true
+            btnShowMap.text = "지도에서 위치 보기"
         }
 
         if (record.hasPhoto()) {
