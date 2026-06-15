@@ -65,30 +65,27 @@ class HomeFragment : Fragment() {
     private fun loadHomeData() {
         val records = dbHelper.getAllTravelRecords()
         val count = records.size
+        val markerCount = records.count { it.hasLocation() }
 
         tvTotalCount.text = "${count}개"
+        tvMarkerStatus.text = "${markerCount}개"
 
         if (records.isNotEmpty()) {
             val recentRecord = records[0]
-            val markerCount = records.count { it.hasLocation() }
 
             tvTodayMessage.text = "최근 여행: ${recentRecord.place}"
             tvTodaySubMessage.text = "${recentRecord.visitDate}에 저장된 여행 기록입니다."
 
             tvRecentPlace.text = recentRecord.place
             tvRecentMemo.text = recentRecord.memo.ifBlank {
-                "메모가 없는 여행 기록입니다."
+                "작성된 메모가 없는 여행 기록입니다."
             }
-
-            tvMarkerStatus.text = "${markerCount}개"
         } else {
             tvTodayMessage.text = "아직 저장된 여행 기록이 없습니다"
-            tvTodaySubMessage.text = "여행지명, 날짜, 사진, 메모를 저장할 수 있도록 기능을 하나씩 구현할 예정입니다."
+            tvTodaySubMessage.text = "기록 탭에서 여행지명, 날짜, 사진, 메모를 저장할 수 있습니다."
 
             tvRecentPlace.text = "최근 기록이 없습니다"
             tvRecentMemo.text = "여행 기록을 추가하면 이곳에 최근 여행지가 표시됩니다."
-
-            tvMarkerStatus.text = "준비중"
         }
     }
 }

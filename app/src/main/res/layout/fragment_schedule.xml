@@ -30,10 +30,21 @@
             android:textColor="@color/travel_gray"
             android:textSize="15sp" />
 
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="14dp"
+            android:background="@drawable/bg_card_yellow"
+            android:lineSpacingExtra="4dp"
+            android:padding="14dp"
+            android:text="사용 방법: 예정 여행지를 입력하고 날짜와 시간을 선택한 뒤 일정 저장하기를 누르면 일정이 저장됩니다."
+            android:textColor="@color/travel_dark"
+            android:textSize="14sp" />
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="22dp"
+            android:layout_marginTop="18dp"
             android:background="@drawable/bg_card_white"
             android:elevation="4dp"
             android:orientation="vertical"
