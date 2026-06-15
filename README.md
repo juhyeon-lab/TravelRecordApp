@@ -80,7 +80,7 @@ TravelRecordApp은 여행 장소, 방문 날짜, 메모, 사진, 위치 정보�
 * Room, Firebase, Retrofit 미사용
 
 ## 주의 사항
-Google Maps API Key는 `local.properties` 파일에 저장하였고, GitHub에는 업로드하지 않았다.
+Google Maps API Key는 `local.properties` 파일에 저장하였다.
 `AndroidManifest.xml`에서는 `${MAPS_API_KEY}` placeholder를 통해 API Key를 참조한다.
 
 ## 제출 정보
