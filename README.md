@@ -3,7 +3,7 @@
 ## 프로젝트 정보
 * 프로젝트명: TravelRecordApp
 * 과목: 모바일프로그래밍 기말 프로젝트
-* 개발자: 컴퓨터소프트웨어공학과 20233684 이주현
+* 개발자: 20233684 이주현
 * 개발 환경: Android Studio, Kotlin, XML
 * 데이터베이스: SQLiteOpenHelper
 * 최소 SDK: API 30
